@@ -26,7 +26,6 @@ jobs:
             SCCACHE_CACHE_SIZE: 300M
             SCCACHE_DIR: /home/runner/.cache/sccache
             SCCACHE_IDLE_TIMEOUT: 0
-            RAV1E_JS_DIR: rav1e_js
 
         if: >-
          (github.event_name == 'push' && !endsWith(github.event.head_commit.message, 'CI: skip')) ||
@@ -90,13 +89,11 @@ jobs:
             # BUILD & PACK
             - name: Build
               if: matrix.conf == 'build'
-              working-directory: ${{ env.RAV1E_JS_DIR }}
               # --dev needed, because of https://github.com/rustwasm/wasm-pack/issues/886
               run: wasm-pack build --dev
 
             - name: Pack
               if: matrix.conf == 'build'
-              working-directory: ${{ env.RAV1E_JS_DIR }}
               run: wasm-pack pack
 
             # TESTING
@@ -109,7 +106,6 @@ jobs:
             # needed because of # https://github.com/rustwasm/wasm-bindgen/issues/2261
             - name: Install geckodriver
               if: matrix.conf == 'firefox'
-              working-directory: ${{ env.RAV1E_JS_DIR }}
               env:
                   LINK: https://github.com/mozilla/geckodriver/releases/download
                   GECKO_VERSION: v0.26.0
@@ -119,13 +115,12 @@ jobs:
 
             - name: Test ${{ matrix.conf }} (${{ matrix.headless }})
               if: matrix.conf != 'build'
-              working-directory: ${{ env.RAV1E_JS_DIR }}
               run: wasm-pack test --${{ matrix.conf }} ${{ matrix.headless }} ${{ matrix.driver }}
 
             - name: Install and Build JavaScript
               if: matrix.conf == 'build'
-              working-directory: ${{ env.RAV1E_JS_DIR }}/www
               run: |
+                  cd www/
                   yarn install
                   yarn build
 
