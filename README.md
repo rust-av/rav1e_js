@@ -16,8 +16,8 @@ The slowest and most dangerous AV1 encoder of the web.
 
 1. Clone + enter the repository
     ```bash
-    git clone https://github.com/xiph/rav1e.git
-    cd rav1e/rav1e_js/
+    git clone https://github.com/rust-av/rav1e_js
+    cd rav1e_js
     ```
 2. Install [`wasm-pack`](https://github.com/rustwasm/wasm-pack)
     ```bash
